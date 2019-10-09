@@ -12,4 +12,5 @@ enum NotificationType {
 }
 
 service * with serviceClass
+paginate Notification with pagination
 microservice Notification with Notification

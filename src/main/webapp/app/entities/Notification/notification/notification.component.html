@@ -31,14 +31,14 @@
     <div class="table-responsive" *ngIf="notifications?.length > 0">
         <table class="table table-striped">
             <thead>
-            <tr>
-            <th><span jhiTranslate="global.field.id">ID</span></th>
-            <th><span jhiTranslate="storeApp.notificationNotification.date">Date</span></th>
-            <th><span jhiTranslate="storeApp.notificationNotification.details">Details</span></th>
-            <th><span jhiTranslate="storeApp.notificationNotification.sentDate">Sent Date</span></th>
-            <th><span jhiTranslate="storeApp.notificationNotification.format">Format</span></th>
-            <th><span jhiTranslate="storeApp.notificationNotification.userId">User Id</span></th>
-            <th><span jhiTranslate="storeApp.notificationNotification.productId">Product Id</span></th>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="date"><span jhiTranslate="storeApp.notificationNotification.date">Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="details"><span jhiTranslate="storeApp.notificationNotification.details">Details</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="sentDate"><span jhiTranslate="storeApp.notificationNotification.sentDate">Sent Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="format"><span jhiTranslate="storeApp.notificationNotification.format">Format</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="userId"><span jhiTranslate="storeApp.notificationNotification.userId">User Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productId"><span jhiTranslate="storeApp.notificationNotification.productId">Product Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -78,5 +78,13 @@
             </tr>
             </tbody>
         </table>
+    </div>
+    <div [hidden]="notifications?.length === 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
     </div>
 </div>

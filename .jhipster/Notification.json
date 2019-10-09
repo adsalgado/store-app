@@ -46,7 +46,7 @@
     "changelogDate": "20191009210413",
     "entityTableName": "notification",
     "dto": "no",
-    "pagination": "no",
+    "pagination": "pagination",
     "service": "serviceClass",
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
