@@ -12,6 +12,7 @@
         "customer": "Customer",
         "productOrder": "Product Order",
         "orderItem": "Order Item",
+        "notificationNotification": "Notification",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
