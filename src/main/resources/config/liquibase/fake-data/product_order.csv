@@ -1,0 +1,11 @@
+id;placed_date;status;invoice_id;code
+1;2019-10-08T20:20:36;CANCELLED;68396;Checking Account
+2;2019-10-08T20:05:33;PENDING;63640;multi-byte Jamaican Dollar North Carolina
+3;2019-10-09T15:39:42;CANCELLED;62593;parsing invoice
+4;2019-10-09T13:47:07;PENDING;21458;utilize
+5;2019-10-09T17:48:38;PENDING;33655;withdrawal
+6;2019-10-09T09:29:46;CANCELLED;49603;Solomon Islands Dollar
+7;2019-10-09T10:23:08;CANCELLED;96758;China
+8;2019-10-09T08:34:56;CANCELLED;12768;Robust Louisiana
+9;2019-10-08T21:56:06;PENDING;73990;Configurable iterate Liechtenstein
+10;2019-10-09T06:49:42;CANCELLED;5348;Interactions
