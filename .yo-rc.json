@@ -2,7 +2,8 @@
   "generator-jhipster": {
     "promptValues": {
       "packageName": "mx.com.sadead.store",
-      "nativeLanguage": "es"
+      "nativeLanguage": "es",
+      "microservicePath": "../invoice"
     },
     "jhipsterVersion": "6.2.0",
     "applicationType": "gateway",

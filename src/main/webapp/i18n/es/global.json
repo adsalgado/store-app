@@ -13,6 +13,8 @@
         "productOrder": "Product Order",
         "orderItem": "Order Item",
         "notificationNotification": "Notification",
+        "invoiceInvoice": "Invoice",
+        "invoiceShipment": "Shipment",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
