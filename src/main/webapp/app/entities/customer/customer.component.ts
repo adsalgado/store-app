@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
+import { LazyLoadEvent } from 'primeng/components/common/api';
+
 import { ICustomer } from 'app/shared/model/customer.model';
 import { AccountService } from 'app/core';
 
@@ -13,7 +15,76 @@ import { CustomerService } from './customer.service';
 
 @Component({
   selector: 'jhi-customer',
-  templateUrl: './customer.component.html'
+  templateUrl: './customer.component.html',
+  styles: [
+    `
+      /* Column Priorities */
+      @media only all {
+        th.ui-p-6,
+        td.ui-p-6,
+        th.ui-p-5,
+        td.ui-p-5,
+        th.ui-p-4,
+        td.ui-p-4,
+        th.ui-p-3,
+        td.ui-p-3,
+        th.ui-p-2,
+        td.ui-p-2,
+        th.ui-p-1,
+        td.ui-p-1 {
+          display: none;
+        }
+      }
+
+      /* Show priority 1 at 320px (20em x 16px) */
+      @media screen and (min-width: 20em) {
+        th.ui-p-1,
+        td.ui-p-1 {
+          display: table-cell;
+        }
+      }
+
+      /* Show priority 2 at 480px (30em x 16px) */
+      @media screen and (min-width: 30em) {
+        th.ui-p-2,
+        td.ui-p-2 {
+          display: table-cell;
+        }
+      }
+
+      /* Show priority 3 at 640px (40em x 16px) */
+      @media screen and (min-width: 40em) {
+        th.ui-p-3,
+        td.ui-p-3 {
+          display: table-cell;
+        }
+      }
+
+      /* Show priority 4 at 800px (50em x 16px) */
+      @media screen and (min-width: 50em) {
+        th.ui-p-4,
+        td.ui-p-4 {
+          display: table-cell;
+        }
+      }
+
+      /* Show priority 5 at 960px (60em x 16px) */
+      @media screen and (min-width: 60em) {
+        th.ui-p-5,
+        td.ui-p-5 {
+          display: table-cell;
+        }
+      }
+
+      /* Show priority 6 at 1,120px (70em x 16px) */
+      @media screen and (min-width: 70em) {
+        th.ui-p-6,
+        td.ui-p-6 {
+          display: table-cell;
+        }
+      }
+    `
+  ]
 })
 export class CustomerComponent implements OnInit, OnDestroy {
   currentAccount: any;
@@ -30,6 +101,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
   predicate: any;
   previousPage: any;
   reverse: any;
+  totalRecords: number;
+  loading: boolean;
 
   constructor(
     protected customerService: CustomerService,
@@ -40,7 +113,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
     protected router: Router,
     protected eventManager: JhiEventManager
   ) {
-    this.itemsPerPage = ITEMS_PER_PAGE;
+    this.itemsPerPage = 3;
     this.routeData = this.activatedRoute.data.subscribe(data => {
       this.page = data.pagingParams.page;
       this.previousPage = data.pagingParams.page;
@@ -49,6 +122,31 @@ export class CustomerComponent implements OnInit, OnDestroy {
     });
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.params['search'] ? this.activatedRoute.snapshot.params['search'] : '';
+  }
+
+  loadDataLazy(event: LazyLoadEvent) {
+    this.loading = true;
+
+    //in a real application, make a remote request to load data using state metadata from event
+    //event.first = First row offset
+    //event.rows = Number of rows per page
+    //event.sortField = Field name to sort with
+    //event.sortOrder = Sort order as number, 1 for asc and -1 for dec
+    //filters: FilterMetadata object having field as key and filter value, filter matchMode as value
+
+    //imitate db connection over a network
+
+    this.customerService
+      .search({
+        page: event.first / event.rows,
+        query: this.currentSearch,
+        size: event.rows,
+        sort: this.sort()
+      })
+      .subscribe(
+        (res: HttpResponse<ICustomer[]>) => this.paginateCustomers(res.body, res.headers),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   loadAll() {
@@ -133,6 +231,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
       this.currentAccount = account;
     });
     this.registerChangeInCustomers();
+    this.loading = true;
   }
 
   ngOnDestroy() {
@@ -158,7 +257,9 @@ export class CustomerComponent implements OnInit, OnDestroy {
   protected paginateCustomers(data: ICustomer[], headers: HttpHeaders) {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
+    this.totalRecords = parseInt(headers.get('X-Total-Count'), 10);
     this.customers = data;
+    this.loading = false;
   }
 
   protected onError(errorMessage: string) {

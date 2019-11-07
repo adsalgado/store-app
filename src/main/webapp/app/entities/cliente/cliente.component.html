@@ -1,0 +1,104 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="storeApp.customer.home.title">Customers</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-customer"
+            [routerLink]="['/cliente/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span class="hidden-sm-down" jhiTranslate="storeApp.customer.home.createLabel">
+                Create a new Customer
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <p-toast position="top-left"></p-toast>
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch"
+                        name="currentSearch" placeholder="{{ 'storeApp.customer.home.search' | translate }}">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon [icon]="'search'"></fa-icon>
+                    </button>
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <fa-icon [icon]="'trash-alt'"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br />
+    <div class="alert alert-warning" *ngIf="customers?.length === 0">
+        <span jhiTranslate="storeApp.customer.home.notFound">No customers found</span>
+    </div>
+    <div>
+
+        <p-panel header="Clientes registrados">
+            <p-table [value]="customers" [responsive]="true" [paginator]="true" [rows]="10" [lazy]="true"
+                [totalRecords]='totalRecords' (onLazyLoad)='loadDataLazy($event)' [loading]='loading'
+                [rowsPerPageOptions]="[10,20,50,100]">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th [pSortableColumn]="'id'" style="width: 75px;">
+                            ID
+                            <p-sortIcon [field]="'id'"></p-sortIcon>
+                        </th>
+                        <th [pSortableColumn]="'firstName'" >
+                                Fist Name
+                            <p-sortIcon [field]="'firstName'"></p-sortIcon>
+                        </th>
+                        <th [pSortableColumn]="'lastName'" >
+                                Last Name
+                            <p-sortIcon [field]="'lastName'"></p-sortIcon>
+                        </th>
+                        <th>Gender</th>
+                        <th colspan="2">Email</th>
+                        <th class="ui-p-4">Phone</th>
+                        <th colspan="2" class="ui-p-5">Address Line 1</th>
+                        <th colspan="2" class="ui-p-5">Address Line 2</th>
+                        <th [pSortableColumn]="'city'" >
+                                City
+                            <p-sortIcon [field]="'city'"></p-sortIcon>
+                        </th>
+                        <th [pSortableColumn]="'country'" >
+                                Country
+                            <p-sortIcon [field]="'country'"></p-sortIcon>
+                        </th>
+                        <th style="width: 55px;"></th>
+                        <th style="width: 55px;"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-customer>
+                    <tr>
+                        <td><a [routerLink]="['/cliente', customer.id, 'view' ]">{{customer.id}}</a></td>
+                        <td>{{customer.firstName}}</td>
+                        <td>{{customer.lastName}}</td>
+                        <td>{{customer.gender}}</td>
+                        <td colspan="2">{{customer.email}}</td>
+                        <td class="ui-p-4">{{customer.phone}}</td>
+                        <td colspan="2" class="ui-p-5">{{customer.addressLine1}}</td>
+                        <td colspan="2" class="ui-p-5">{{customer.addressLine2}}</td>
+                        <td class="ui-p-6">{{customer.city}}</td>
+                        <td class="ui-p-6">{{customer.country}}</td>
+                        <td>
+                            <button type="submit" [routerLink]="['/cliente', customer.id, 'edit']"
+                                class="btn btn-info btn-sm">
+                                <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            </button>
+                        </td>
+                        <td>
+                            <button type="submit"
+                                [routerLink]="['/cliente', { outlets: { popup: customer.id + '/delete'} }]"
+                                replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-panel>
+
+    </div>
+
+</div>

@@ -4,6 +4,10 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { JhiLanguageHelper } from 'app/core';
 
 import { StoreSharedModule } from 'app/shared';
+
+import { PanelModule } from 'primeng/panel';
+import { TableModule } from 'primeng/table';
+
 import {
   CustomerComponent,
   CustomerDetailComponent,
@@ -17,7 +21,7 @@ import {
 const ENTITY_STATES = [...customerRoute, ...customerPopupRoute];
 
 @NgModule({
-  imports: [StoreSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [StoreSharedModule, TableModule, PanelModule, RouterModule.forChild(ENTITY_STATES)],
   declarations: [
     CustomerComponent,
     CustomerDetailComponent,

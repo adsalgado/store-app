@@ -2,32 +2,32 @@
   "storeApp": {
     "customer": {
       "home": {
-        "title": "Customers",
-        "createLabel": "Crear nuevo Customer",
-        "createOrEditLabel": "Crear o editar Customer",
-        "search": "Search for Customer",
-        "notFound": "No Customers found"
+        "title": "Clientes",
+        "createLabel": "Crear nuevo Cliente",
+        "createOrEditLabel": "Crear o editar Cliente",
+        "search": "Búsqueda para Cliente",
+        "notFound": "No se encontraron clientes"
       },
-      "created": "Un nuevo Customer ha sido creado con el identificador {{ param }}",
-      "updated": "Un Customer ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Customer ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo Cliente ha sido creado con el identificador {{ param }}",
+      "updated": "Un Cliente ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Cliente ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Customer {{ id }}?"
+        "question": "¿Seguro que quiere eliminar el Cliente {{ id }}?"
       },
       "detail": {
-        "title": "Customer"
+        "title": "Cliente"
       },
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "gender": "Gender",
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "gender": "Género",
       "email": "Email",
-      "phone": "Phone",
-      "addressLine1": "Address Line 1",
-      "addressLine2": "Address Line 2",
-      "city": "City",
-      "country": "Country",
-      "user": "User",
-      "order": "Order"
+      "phone": "Teléfono",
+      "addressLine1": "Dirección 1",
+      "addressLine2": "Dirección 2",
+      "city": "Ciudad",
+      "country": "País",
+      "user": "Usuario",
+      "order": "Orden"
     }
   }
 }

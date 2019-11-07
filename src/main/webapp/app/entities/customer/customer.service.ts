@@ -41,4 +41,9 @@ export class CustomerService {
     const options = createRequestOption(req);
     return this.http.get<ICustomer[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
+
+  getDataPaginated(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<ICustomer[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
 }
