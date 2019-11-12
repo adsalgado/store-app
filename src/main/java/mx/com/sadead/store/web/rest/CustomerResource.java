@@ -1,32 +1,47 @@
 package mx.com.sadead.store.web.rest;
 
-import mx.com.sadead.store.domain.Customer;
-import mx.com.sadead.store.service.CustomerService;
-import mx.com.sadead.store.web.rest.errors.BadRequestAlertException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import javax.validation.Valid;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import mx.com.sadead.store.domain.Customer;
+import mx.com.sadead.store.domain.QCustomer;
+import mx.com.sadead.store.service.CustomerService;
+import mx.com.sadead.store.service.util.FilterDTO;
+import mx.com.sadead.store.service.util.RequestSearchDTO;
+import mx.com.sadead.store.web.rest.errors.BadRequestAlertException;
 
 /**
  * REST controller for managing {@link mx.com.sadead.store.domain.Customer}.
@@ -143,6 +158,45 @@ public class CustomerResource {
     public ResponseEntity<List<Customer>> searchCustomers(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of Customers for query {}", query);
         Page<Customer> page = customerService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+    
+    
+    /**
+     * {@code GET  /customers} : get all the customers.
+     *
+
+     * @param pageable the pagination information.
+
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of customers in body.
+     */
+    @PostMapping("/_customSearch/customers")
+    public ResponseEntity<List<Customer>> customSearchCustomers(@RequestBody RequestSearchDTO requestSearchDTO) {
+        log.debug("REST request to get a page of Customers");
+        
+        List<Predicate> predicates = new ArrayList<>();
+        
+        for (FilterDTO filterDto : requestSearchDTO.getFilters()) {
+			if (filterDto.getProperty().equals("email")) {
+				predicates.add(QCustomer.customer.email.containsIgnoreCase(filterDto.getValue()));				
+			} else if (filterDto.getProperty().equals("firstName")) {
+				predicates.add(QCustomer.customer.firstName.containsIgnoreCase(filterDto.getValue()));
+			}
+		}        
+        Predicate where = ExpressionUtils.allOf(predicates);        
+        Sort sortyBy = null;
+        String[] orders = requestSearchDTO.getSort().split(",");
+        if (orders.length == 2) {
+        	if (StringUtils.equals(orders[1], "desc")) {
+        		sortyBy = Sort.by(orders[0]).descending();
+        	} else {
+        		sortyBy = Sort.by(orders[0]);
+        	}
+        } 
+        Pageable pageabl = PageRequest.of(requestSearchDTO.getPage(), requestSearchDTO.getSize(), sortyBy);
+        log.info("pageable: {}", pageabl);
+        Page<Customer> page = customerService.findAll(where, pageabl);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

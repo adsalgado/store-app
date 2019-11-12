@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { ICustomer } from 'app/shared/model/customer.model';
+import { IRequestSearch } from 'app/shared/model/request-search';
 
 type EntityResponseType = HttpResponse<ICustomer>;
 type EntityArrayResponseType = HttpResponse<ICustomer[]>;
@@ -13,6 +14,7 @@ type EntityArrayResponseType = HttpResponse<ICustomer[]>;
 export class ClienteService {
   public resourceUrl = SERVER_API_URL + 'api/customers';
   public resourceSearchUrl = SERVER_API_URL + 'api/_search/customers';
+  public resourceCustomSeachUrl = SERVER_API_URL + 'api/_customSearch/customers';
 
   constructor(protected http: HttpClient) {}
 
@@ -42,8 +44,7 @@ export class ClienteService {
     return this.http.get<ICustomer[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  getDataPaginated(req?: any): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<ICustomer[]>(this.resourceUrl, { params: options, observe: 'response' });
+  customSearch(requestSearch: IRequestSearch): Observable<EntityArrayResponseType> {
+    return this.http.post<ICustomer[]>(this.resourceCustomSeachUrl, requestSearch, { observe: 'response' });
   }
 }

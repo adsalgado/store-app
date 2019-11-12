@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.types.Predicate;
+
 import java.util.Optional;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -55,7 +57,19 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public Page<Customer> findAll(Pageable pageable) {
         log.debug("Request to get all Customers");
-        return customerRepository.findAll(pageable);
+         return customerRepository.findAll(pageable);
+    }
+    
+    /**
+     * Get all the customers.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<Customer> findAll(Predicate predicate, Pageable pageable) {
+        log.debug("Request to get all Customers");
+        return customerRepository.findAll(predicate, pageable);
     }
 
 

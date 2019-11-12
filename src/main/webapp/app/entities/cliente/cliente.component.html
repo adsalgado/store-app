@@ -11,7 +11,7 @@
     </h2>
     <jhi-alert></jhi-alert>
     <p-toast position="top-left"></p-toast>
-    <div class="row">
+    <div class="row" hidden="true">
         <div class="col-sm-12">
             <form name="searchForm" class="form-inline">
                 <div class="input-group w-100 mt-3">
@@ -34,39 +34,63 @@
     <div>
 
         <p-panel header="Clientes registrados">
-            <p-table [value]="customers" [responsive]="true" [paginator]="true" [rows]="10" [lazy]="true"
+            <p-table #dt [value]="customers" [responsive]="true" [paginator]="true" [rows]="10" [lazy]="true"
                 [totalRecords]='totalRecords' (onLazyLoad)='loadDataLazy($event)' [loading]='loading'
-                [rowsPerPageOptions]="[10,20,50,100]">
+                [rowsPerPageOptions]="[10,20,50,100]" >
 
                 <ng-template pTemplate="header">
                     <tr>
                         <th [pSortableColumn]="'id'" style="width: 75px;">
-                            ID
                             <p-sortIcon [field]="'id'"></p-sortIcon>
+                            ID
                         </th>
-                        <th [pSortableColumn]="'firstName'" >
-                                Fist Name
+                        <th [pSortableColumn]="'firstName'">
                             <p-sortIcon [field]="'firstName'"></p-sortIcon>
+                            Fist Name
                         </th>
-                        <th [pSortableColumn]="'lastName'" >
-                                Last Name
+                        <th [pSortableColumn]="'lastName'">
                             <p-sortIcon [field]="'lastName'"></p-sortIcon>
+                            Last Name
                         </th>
                         <th>Gender</th>
-                        <th colspan="2">Email</th>
+                        <th colspan="2">
+                            Email
+                        </th>
                         <th class="ui-p-4">Phone</th>
                         <th colspan="2" class="ui-p-5">Address Line 1</th>
                         <th colspan="2" class="ui-p-5">Address Line 2</th>
-                        <th [pSortableColumn]="'city'" >
-                                City
+                        <th [pSortableColumn]="'city'" class="ui-p-6">
                             <p-sortIcon [field]="'city'"></p-sortIcon>
+                            City
                         </th>
-                        <th [pSortableColumn]="'country'" >
-                                Country
+                        <th [pSortableColumn]="'country'" class="ui-p-6">
                             <p-sortIcon [field]="'country'"></p-sortIcon>
+                            Country
                         </th>
                         <th style="width: 55px;"></th>
                         <th style="width: 55px;"></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <input pInputText type="text" style="width: 100%;"
+                                (keyup.enter)="dt.filter($event.target.value, 'firstName', 'contains')"
+                                (click)="$event.stopPropagation()">
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="2">
+                            <input pInputText type="text" style="width: 100%;"
+                                (keyup.enter)="dt.filter($event.target.value, 'email', 'contains')"
+                                (click)="$event.stopPropagation()">
+                        </th>
+                        <th class="ui-p-4"></th>
+                        <th class="ui-p-5" colspan="2"></th>
+                        <th class="ui-p-5" colspan="2"></th>
+                        <th class="ui-p-6"></th>
+                        <th class="ui-p-6"></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-customer>

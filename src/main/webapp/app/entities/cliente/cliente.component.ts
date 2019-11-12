@@ -3,15 +3,18 @@ import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/ht
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { isObject } from 'rxjs/util/isObject';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { LazyLoadEvent } from 'primeng/components/common/api';
+import { FilterMetadata } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { ICustomer } from 'app/shared/model/customer.model';
 import { AccountService } from 'app/core';
 
 import { ClienteService } from './cliente.service';
+import { IFilterable } from 'app/shared/model/filterable';
 
 @Component({
   selector: 'jhi-cliente',
@@ -60,27 +63,36 @@ export class ClienteComponent implements OnInit, OnDestroy {
     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Prueba msg' });
   }
   ngOnDestroy(): void {
-    //throw new Error("Method not implemented.");
+    // throw new Error("Method not implemented.");
   }
 
-  loadDataLazy(event: LazyLoadEvent) {
+  loadDataLazy(event: LazyLoadEvent, filters: FilterMetadata) {
     this.loading = true;
 
-    //in a real application, make a remote request to load data using state metadata from event
-    //event.first = First row offset
-    //event.rows = Number of rows per page
-    //event.sortField = Field name to sort with
-    //event.sortOrder = Sort order as number, 1 for asc and -1 for dec
-    //filters: FilterMetadata object having field as key and filter value, filter matchMode as value
+    // in a real application, make a remote request to load data using state metadata from event
+    // event.first = First row offset
+    // event.rows = Number of rows per page
+    // event.sortField = Field name to sort with
+    // event.sortOrder = Sort order as number, 1 for asc and -1 for dec
+    // filters: FilterMetadata object having field as key and filter value, filter matchMode as value
 
-    var sortField = event.sortField ? event.sortField : 'id';
-    var sortOrder = event.sortOrder !== 1 ? 'desc' : 'asc';
+    const sortField = event.sortField ? event.sortField : 'id';
+    const sortOrder = event.sortOrder !== 1 ? 'desc' : 'asc';
+    const array_filters: IFilterable[] = new Array();
+
+    Object.entries(event.filters).forEach(([key, value]) => {
+      if (isObject(value)) {
+        const filterDto = { property: key, value: value['value'], matchMode: value['matchMode'] };
+        array_filters.push(filterDto);
+      }
+    });
 
     this.clienteService
-      .query({
+      .customSearch({
         page: event.first / event.rows,
         size: event.rows,
-        sort: ['' + sortField + ',' + sortOrder + '']
+        sort: '' + sortField + ',' + sortOrder + '',
+        filters: array_filters
       })
       .subscribe(
         (res: HttpResponse<ICustomer[]>) => this.paginateCustomers(res.body, res.headers),
