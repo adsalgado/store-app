@@ -5,6 +5,7 @@ public class RequestSearchDTO {
 	private int page;
 	private int size;
 	private String sort;
+	private String[] sorts;
 	private FilterDTO[] filters;
 	
 	public int getPage() {
@@ -31,6 +32,11 @@ public class RequestSearchDTO {
 	public void setFilters(FilterDTO[] filters) {
 		this.filters = filters;
 	}
-	
+	public String[] getSorts() {
+		return sorts;
+	}
+	public void setSorts(String[] sorts) {
+		this.sorts = sorts;
+	}
 	
 }

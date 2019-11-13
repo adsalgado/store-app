@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +32,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -184,17 +184,23 @@ public class CustomerResource {
 				predicates.add(QCustomer.customer.firstName.containsIgnoreCase(filterDto.getValue()));
 			}
 		}        
-        Predicate where = ExpressionUtils.allOf(predicates);        
-        Sort sortyBy = null;
-        String[] orders = requestSearchDTO.getSort().split(",");
-        if (orders.length == 2) {
-        	if (StringUtils.equals(orders[1], "desc")) {
-        		sortyBy = Sort.by(orders[0]).descending();
-        	} else {
-        		sortyBy = Sort.by(orders[0]);
-        	}
-        } 
-        Pageable pageabl = PageRequest.of(requestSearchDTO.getPage(), requestSearchDTO.getSize(), sortyBy);
+        Predicate where = ExpressionUtils.allOf(predicates);       
+        
+        List<Order> sorts = new ArrayList<>();
+        for (int i = 0; i < requestSearchDTO.getSorts().length; i++) {
+        	Order sortyBy = null;
+        	String[] orders = requestSearchDTO.getSorts()[i].split(",");
+            if (orders.length == 2) {
+            	if (StringUtils.equals(orders[1], "desc")) {
+            		sortyBy = Order.desc(orders[0]);
+            	} else {
+            		sortyBy = Order.by(orders[0]);
+            	}
+            } 
+            sorts.add(sortyBy); 
+		}
+        
+        Pageable pageabl = PageRequest.of(requestSearchDTO.getPage(), requestSearchDTO.getSize(), Sort.by(sorts));
         log.info("pageable: {}", pageabl);
         Page<Customer> page = customerService.findAll(where, pageabl);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

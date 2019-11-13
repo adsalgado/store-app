@@ -76,10 +76,18 @@ export class ClienteComponent implements OnInit, OnDestroy {
     // event.sortOrder = Sort order as number, 1 for asc and -1 for dec
     // filters: FilterMetadata object having field as key and filter value, filter matchMode as value
 
-    const sortField = event.sortField ? event.sortField : 'id';
-    const sortOrder = event.sortOrder !== 1 ? 'desc' : 'asc';
-    const array_filters: IFilterable[] = new Array();
+    const array_sorts: string[] = new Array();
+    if (event.multiSortMeta) {
+      for (const sortMeta of event.multiSortMeta) {
+        array_sorts.push('' + sortMeta.field + ',' + (sortMeta.order === -1 ? 'desc' : 'asc') + '');
+      }
+    } else {
+      const sortField = 'id';
+      const sortOrder = 'asc';
+      array_sorts.push('' + sortField + ',' + sortOrder + '');
+    }
 
+    const array_filters: IFilterable[] = new Array();
     Object.entries(event.filters).forEach(([key, value]) => {
       if (isObject(value)) {
         const filterDto = { property: key, value: value['value'], matchMode: value['matchMode'] };
@@ -91,7 +99,7 @@ export class ClienteComponent implements OnInit, OnDestroy {
       .customSearch({
         page: event.first / event.rows,
         size: event.rows,
-        sort: '' + sortField + ',' + sortOrder + '',
+        sorts: array_sorts,
         filters: array_filters
       })
       .subscribe(

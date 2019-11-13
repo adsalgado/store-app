@@ -32,55 +32,54 @@
     </div>
     <div class="table-responsive" *ngIf="customers?.length > 0">
 
-        <p-panel header="Clientes registrados">
-            <p-table [value]="customers" [responsive]="true" [paginator]="true" [rows]="3" [lazy]="true"
-                [totalRecords]='totalRecords' (onLazyLoad)='loadDataLazy($event)' [loading]='loading'>
-                
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th class="ui-column-title" style="width: 55px;">ID</th>
-                        <th>Fist Name</th>
-                        <th>Last Name</th>
-                        <th>Gender</th>
-                        <th>Email</th>
-                        <th class="ui-p-4">Phone</th>
-                        <th class="ui-p-5">Address Line 1</th>
-                        <th class="ui-p-5">Address Line 2</th>
-                        <th class="ui-p-6">City</th>
-                        <th class="ui-p-6">Country</th>
-                        <th style="width: 55px;"></th>
-                        <th style="width: 55px;"></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-customer>
-                    <tr>
-                        <td><a [routerLink]="['/customer', customer.id, 'view' ]">{{customer.id}}</a></td>
-                        <td>{{customer.firstName}}</td>
-                        <td>{{customer.lastName}}</td>
-                        <td>{{customer.gender}}</td>
-                        <td>{{customer.email}}</td>
-                        <td class="ui-p-4">{{customer.phone}}</td>
-                        <td class="ui-p-5">{{customer.addressLine1}}</td>
-                        <td class="ui-p-5">{{customer.addressLine2}}</td>
-                        <td class="ui-p-6">{{customer.city}}</td>
-                        <td class="ui-p-6">{{customer.country}}</td>
-                        <td>
-                            <button type="submit" [routerLink]="['/customer', customer.id, 'edit']"
-                                class="btn btn-info btn-sm">
-                                <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            </button>
-                        </td>
-                        <td>
-                            <button type="submit"
-                                [routerLink]="['/customer', { outlets: { popup: customer.id + '/delete'} }]"
-                                replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
-                                <fa-icon [icon]="'times'"></fa-icon>
-                            </button>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </p-panel>
+        <p-table [value]="customers" [responsive]="true" [paginator]="true" [rows]="3" [lazy]="true"
+            [totalRecords]='totalRecords' (onLazyLoad)='loadDataLazy($event)' [loading]='loading' scrollable="true"
+            sortMode="multiple">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="ui-column-title" style="width: 55px;">ID</th>
+                    <th>Fist Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                    <th>Email</th>
+                    <th class="ui-p-4">Phone</th>
+                    <th class="ui-p-5">Address Line 1</th>
+                    <th class="ui-p-5">Address Line 2</th>
+                    <th class="ui-p-6">City</th>
+                    <th class="ui-p-6">Country</th>
+                    <th style="width: 55px;"></th>
+                    <th style="width: 55px;"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-customer>
+                <tr>
+                    <td><a [routerLink]="['/customer', customer.id, 'view' ]">{{customer.id}}</a></td>
+                    <td>{{customer.firstName}}</td>
+                    <td>{{customer.lastName}}</td>
+                    <td>{{customer.gender}}</td>
+                    <td>{{customer.email}}</td>
+                    <td class="ui-p-4">{{customer.phone}}</td>
+                    <td class="ui-p-5">{{customer.addressLine1}}</td>
+                    <td class="ui-p-5">{{customer.addressLine2}}</td>
+                    <td class="ui-p-6">{{customer.city}}</td>
+                    <td class="ui-p-6">{{customer.country}}</td>
+                    <td>
+                        <button type="submit" [routerLink]="['/customer', customer.id, 'edit']"
+                            class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="submit"
+                            [routerLink]="['/customer', { outlets: { popup: customer.id + '/delete'} }]"
+                            replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
 
     </div>
 
